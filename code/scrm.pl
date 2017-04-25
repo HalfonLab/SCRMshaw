@@ -223,9 +223,12 @@ if ($Step =~ /3/){
             `perl $Bin/../code/immNotChr.pl -kmer $Kmer -win $Wlen $Outdir/training/$train_set/crms.fasta $Outdir/training/$train_set/neg.fasta $Outdir/scores/imm/$train_set $Outdir/fasta/windows`;
             warn "Getting top scored CRMs from IMM $train_set results...\n";
             if (defined $Gene) {
+                warn "Gene is defined: ".$Gene."\n";
                 if (defined $crm2uni{$train_set}) {
+                    warn "Universe gene set is defined\n";
                     `perl $Bin/../code/top_scores.ReAsgnNrbGene.pl -universe $crm2uni{$train_set} -win $Wlen -topw $Thitw -topg $Thitg $Outdir/scores/imm/$train_set $Outdir/fasta/windows $Outdir/gff/genes $Outdir/hits/imm/$train_set/$train_set.hits`;
                 } else {
+                    warn "Universe gene set is not defined\n";
                     `perl $Bin/../code/top_scores.ReAsgnNrbGene.pl -win $Wlen -topw $Thitw -topg $Thitg $Outdir/scores/imm/$train_set $Outdir/fasta/windows $Outdir/gff/genes $Outdir/hits/imm/$train_set/$train_set.hits`;  
                 }
 
@@ -245,10 +248,13 @@ if ($Step =~ /3/){
             `perl $Bin/../code/hexmcd.pl $hexmcd_param -kmer $Kmer -win $Wlen -shift $Wshift $Outdir/training/$train_set/crms.fasta.sum.rc.$k6 $Outdir/training/$train_set/neg.fasta.sum.rc.$k6 $Outdir/scores/hexmcd/$train_set $Outdir/fasta/chr $Outdir/fasta/kmers`;
             warn "getting top scored CRMs from HexMCD $train_set results...\n";
             if (defined $Gene){
+                warn "Gene is defined: ".$Gene."\n";
                 if (defined $crm2uni{$train_set}){
+                    warn "Universe gene set is defined\n";
                     `perl $Bin/../code/top_scores.ReAsgnNrbGene.pl -universe $crm2uni{$train_set} -win $Wlen -topw $Thitw -topg $Thitg $Outdir/scores/hexmcd/$train_set $Outdir/fasta/windows $Outdir/gff/genes $Outdir/hits/hexmcd/$train_set/$train_set.hits`;
                 }
                 else{
+                    warn "Universe gene set is not defined\n";
                     `perl $Bin/../code/top_scores.ReAsgnNrbGene.pl -win $Wlen -topw $Thitw -topg $Thitg $Outdir/scores/hexmcd/$train_set $Outdir/fasta/windows $Outdir/gff/genes $Outdir/hits/hexmcd/$train_set/$train_set.hits`;    
                 }
                 `perl $Bin/../code/ranking.hit.pl --distance $Distance $Outdir/hits/hexmcd/$train_set/$train_set.hits > $Outdir/hits/hexmcd/$train_set/$train_set.hits.rankLst`;
@@ -268,9 +274,12 @@ if ($Step =~ /3/){
             `perl $Bin/../code/pac.pl $pac_param -kmer $Kmer -nmer $Plmer -win $Wlen -shift $Wshift $Outdir/training/$train_set/crms.fasta.sum.rc.$k6 $Outdir/training/$train_set/crms.fasta.sum.rc.$k1 $Outdir/training/$train_set/ymf.$Ysize.sum.rc.$Kmer $Outdir/scores/pac/$train_set $Outdir/fasta/chr $Outdir/fasta/kmers`;
             warn "getting top scored CRMs from PAC $train_set results...\n";
             if (defined $Gene){
+                warn "Gene is defined: ".$Gene."\n";
                 if (defined $crm2uni{$train_set}){
+                    warn "Universe gene set is defined\n";
                     `perl $Bin/../code/top_scores.ReAsgnNrbGene.pl -universe $crm2uni{$train_set} -win $Wlen -topw $Thitw -topg $Thitg $Outdir/scores/pac/$train_set $Outdir/fasta/windows $Outdir/gff/genes $Outdir/hits/pac/$train_set/$train_set.hits`;
                 } else {
+                    warn "Universe gene set is not defined\n";
                     `perl $Bin/../code/top_scores.ReAsgnNrbGene.pl -win $Wlen -topw $Thitw -topg $Thitg $Outdir/scores/pac/$train_set $Outdir/fasta/windows $Outdir/gff/genes $Outdir/hits/pac/$train_set/$train_set.hits`;
                 }
                 `perl $Bin/../code/ranking.hit.pl --distance $Distance $Outdir/hits/pac/$train_set/$train_set.hits > $Outdir/hits/pac/$train_set/$train_set.hits.rankLst`;

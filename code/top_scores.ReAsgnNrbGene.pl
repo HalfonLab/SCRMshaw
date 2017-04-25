@@ -80,7 +80,7 @@ if (defined $Universe){ ## return 1 if defined universe
 
 open OUT,">$outFile";
 ##============ Step 1: Parse gff file ============##
-open(IFILE, "<$gff ") or die ("Couldn't open $gff  for reading\n");
+open(IFILE, "<$gff ") or die ("Couldn't open $gff for reading\n");
 while (<IFILE>) {
 	chomp($_);
 	my ($chr, $u, $d, $str, $id) = split(/\s+/, $_);    ## e.g. 2L, 7529, 9484, +, FBgn0031208
@@ -102,7 +102,7 @@ foreach my $chr (keys %g2pos) {
 while (<$odir/*.fasta>) {
 	chomp(my $file = $_);
 	my $name = (split /\//,$file)[-1];						## e.g. 2L.fasta
-	my $chr = (split /\./,$name)[0];						## e.g. 2L
+	my $chr = (split /\.fasta/,$name)[0];					## e.g. 2L
 	open(IFILE, "<$file") or die("Couldn't open $file for reading\n");
 	while (<IFILE>) {
 		chomp;													
@@ -137,6 +137,7 @@ while (<$sdir/*.fasta>) {
 ##		w's position, score, closest gene inf, and sequence
 foreach my $key(sort{ $score{$b} <=> $score{$a}} keys %score) {
     if ($hitw > 0){
+    	# warn $hitw." > 0\n";
         if ($nhitw >= $hitw) {last;}        ## don't output more than 2000
         my ($chr, $w)   = split(/\:/, $key );       ## chr, w
         my $score   = $score{$key};                 ## window score, e.g. 2.22802
@@ -151,17 +152,19 @@ foreach my $key(sort{ $score{$b} <=> $score{$a}} keys %score) {
     }
    
     if ($hitg > 0){
+    	# warn $hitg." > 0\n";
         if ($nhitg >= $hitg) {last;}
-	    my ($chr, $w)	= split(/\:/, $key );		## chr, w
-
-        my $score 	= $score{$key};					## window score, e.g. 2.22802
+	    my ($chr, $w) = split(/\:/, $key );			## chr, w
+	    # warn "chr=".$chr." w=".$w."\n";
+        my $score = $score{$key};					## window score, e.g. 2.22802
 	    my $csv	= closestGenes($chr,$w);		    ## get 2 closest genes to window.
+	    # warn "csv=".$csv."\n";
 	    if ($csv =~ /Unknown/) { next; }			## skip if gene unknown.
-	    my @colsep 	= split(/\:/, $csv);			## split by :
+	    my @colsep = split(/\:/, $csv);				## split by :
 	    my $gene = $colsep[0];                      ## closest gene
         my $wseq = $sequence{$key};                 ## window seq
-        if ($uhit{$gene} == 1){             ## return 1 if this gene mark in universe/gff
-	        $nhitg = $nhitg + 1;						## incr hits and print hit to STDOUT
+        if ($uhit{$gene} == 1){             		## return 1 if this gene mark in universe/gff
+	        $nhitg = $nhitg + 1;					## incr hits and print hit to STDOUT
             $uhit{$gene} = 2;
         }
 	    print OUT ">$key\t$score\t$csv\n";      ## ex:>chr:w score neighbor-info
